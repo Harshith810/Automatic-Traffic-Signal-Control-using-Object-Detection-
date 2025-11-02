@@ -4,17 +4,24 @@ This an AI-powered solution that uses object detection (YOLOv8) to manage urban 
 
 
 Features
+
 Real-Time Vehicle Detection: Identifies and counts cars, bikes, buses, and trucks.
+
 Adaptive Signal Control: Adjusts green light duration based on real-time traffic density.
+
 Emergency Vehicle Priority: Detects emergency vehicles and prioritizes their lane.
+
 Eco-Friendly Design: Minimizes idle time and reduces CO₂ emissions.
 
 
 Tech Stack
 
-Programming Language :Python 3.10+
+Programming Language :Python 3
+
 AI Model : YOLOv8 (Ultralytics)
+
 Computer Vision : OpenCV
+
 Data Annotation : LabelImg / Roboflow Annotate
 
 System Workflow

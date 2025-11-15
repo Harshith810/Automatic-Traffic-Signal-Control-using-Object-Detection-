@@ -81,3 +81,70 @@ Automated saving of trained models and weights (best.pt, last.pt) to Google Driv
 
 Exported trained models for use in VS Code environment for deployment testing.
 
+Week 3 Progress:
+
+Week 3 focused on system integration, signal logic, web deployment, and final application building:
+
+1. Full Integration Into Flask Web App
+
+Built a complete web interface index.html.
+
+Integrated:
+
+Normal YOLO model
+
+Emergency YOLO model
+
+Ensemble merging logic
+
+Lane detection
+
+Traffic density logic
+
+2. Multi-Lane Processing Logic
+
+System now supports dual-lane comparison.
+
+Two inputs processed: Lane A & Lane B.
+
+Priority determination:
+
+Emergency vehicle presence
+
+Emergency priority order
+
+Density-based fallback
+
+3. Emergency Priority Rule Added
+
+Highest Priority → Ambulance
+Medium → Fire Truck
+Low → Police Car
+
+If emergencies appear on multiple lanes, system selects lane with highest-priority emergency.
+
+4. Video Processing Support
+
+Added ability to upload videos.
+
+Processes each frame through YOLO ensemble.
+
+Saves fully annotated videos.
+
+5. Testing With Real-World Data
+
+Used high-density, medium-density, and low-density traffic images.
+
+Verified ensemble detection correctness.
+
+Ensured emergency logic always overrides density.
+
+Final Output:
+
+Green signal determination based on traffic density.
+
+Emergency-aware logical override.
+
+Annotated output image/video.
+
+Fully functional dual-lane intelligent traffic controller.

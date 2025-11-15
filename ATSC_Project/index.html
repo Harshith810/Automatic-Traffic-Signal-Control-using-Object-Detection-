@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>ATSC — Dual Lane Comparator</title>
+  <style>
+    body{font-family:Segoe UI,Arial;background:#f5f7fb;color:#222;padding:28px;text-align:center}
+    .card{background:#fff;padding:18px;border-radius:10px;display:inline-block;box-shadow:0 6px 20px rgba(0,0,0,.08);width:95%;max-width:1100px}
+    h1{margin:0 0 12px}
+    form{margin:16px 0}
+    .two-up{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+    .panel{background:#fafafa;border-radius:8px;padding:12px;min-width:300px;max-width:460px;box-shadow:0 2px 8px rgba(0,0,0,.03)}
+    img{max-width:100%;border-radius:6px;border:1px solid #e6e9ef}
+    .meta{font-size:14px;color:#444;margin-top:8px;text-align:left}
+    .big{font-weight:700}
+    .result{margin-top:18px;padding:12px;background:#eef7ef;border-radius:8px;border:1px solid #d6efcf}
+    .error{color:#b91c1c}
+    .btn{background:#0078ff;color:#fff;padding:10px 14px;border-radius:8px;border:none;cursor:pointer}
+    .link{color:#0366d6}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Automatic Traffic Signal Control — Dual Lane Mode</h1>
+    <p>Upload two inputs (image or video) — one for <b>Lane A</b> and one for <b>Lane B</b>. The system will process both and decide which lane should receive green (emergency overrides density).</p>
+
+    <form action="/upload_two" method="post" enctype="multipart/form-data">
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <label style="display:block"><b>Lane A:</b><br/><input type="file" name="laneA" accept="image/*,video/*" required></label>
+        <label style="display:block"><b>Lane B:</b><br/><input type="file" name="laneB" accept="image/*,video/*" required></label>
+      </div>
+      <div style="margin-top:12px"><button class="btn" type="submit">Process Both</button></div>
+    </form>
+
+    {% if error %}
+      <div class="error">{{ error }}</div>
+    {% endif %}
+
+    {% if result %}
+      <div class="two-up">
+        <div class="panel">
+          <h3 class="big">Lane A</h3>
+          <div>
+            {% if result.laneA.type == 'image' %}
+              <img src="{{ result.laneA.output }}" alt="Lane A output"/>
+            {% else %}
+              <p>Processed video: <a class="link" href="{{ result.laneA.output }}">Download</a></p>
+            {% endif %}
+          </div>
+          <div class="meta">
+            <p><b>Total (image avg / video mean):</b> {{ result.laneA.total }}</p>
+            <p><b>Emergency present:</b> {{ result.laneA.emergency }}</p>
+            {% if result.laneA.counts %}
+              <p><b>Class counts:</b></p>
+              <ul>
+                {% for k,v in result.laneA.counts.items() %}
+                  <li>{{ k }} : {{ v }}</li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3 class="big">Lane B</h3>
+          <div>
+            {% if result.laneB.type == 'image' %}
+              <img src="{{ result.laneB.output }}" alt="Lane B output"/>
+            {% else %}
+              <p>Processed video: <a class="link" href="{{ result.laneB.output }}">Download</a></p>
+            {% endif %}
+          </div>
+          <div class="meta">
+            <p><b>Total (image avg / video mean):</b> {{ result.laneB.total }}</p>
+            <p><b>Emergency present:</b> {{ result.laneB.emergency }}</p>
+            {% if result.laneB.counts %}
+              <p><b>Class counts:</b></p>
+              <ul>
+                {% for k,v in result.laneB.counts.items() %}
+                  <li>{{ k }} : {{ v }}</li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div class="result">
+        <h3>Decision</h3>
+        <p>{{ result.decision }}</p>
+        <p><b>Final green given to:</b> {{ result.winner }}</p>
+        <p><b>Suggested green duration (sec):</b> {{ result.green_duration }}</p>
+      </div>
+    {% endif %}
+  </div>
+</body>
+</html>
+
+
